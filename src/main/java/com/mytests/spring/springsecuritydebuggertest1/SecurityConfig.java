@@ -1,0 +1,73 @@
+package com.mytests.spring.springsecuritydebuggertest1;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
+
+import static org.springframework.security.web.util.matcher.RegexRequestMatcher.regexMatcher;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .httpBasic(Customizer.withDefaults())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST).hasAnyRole( "ADMIN", "USER")  // ok, except the root mapping
+                        .requestMatchers(HttpMethod.GET,"/").fullyAuthenticated()  // ok, except the root mapping
+                        .requestMatchers("/new_home", "/home").permitAll() // unlock is not required but suggested
+                        .requestMatchers("/anonymous/**").anonymous() // ok
+                        .requestMatchers(HttpMethod.GET,"/admin/**").hasAuthority("ROLE_ADMIN") // ok
+                        .requestMatchers("/registered/protected/**").hasRole("ADMIN") // ok
+                        .requestMatchers("/registered/secured/**").hasRole("USER") // ok
+                        .requestMatchers("/registered/multi/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_GUEST") // ok
+                        .requestMatchers("/{*var}/master1").hasRole("MASTER") // partially detected roots, no unlocking even for detected
+                        .requestMatchers("/**/master2").hasRole("MASTER") // ok
+                        .requestMatchers("/expression/guest/**").access(new WebExpressionAuthorizationManager("hasRole('GUEST')")) // detected as permitAll, unlocking fails
+                        .requestMatchers("/expression/protected/**").access(new WebExpressionAuthorizationManager("hasRole('ADMIN') || hasRole('USER')")) // detected as permitAll, unlocking fails
+                        .requestMatchers("/expression/secured/**").access(new WebExpressionAuthorizationManager("hasRole('ADMIN') && hasRole('USER')")) // detected as permitAll, unlocking fails
+                        .requestMatchers(regexMatcher("/regex\\d*(/.*)?")).hasRole("GUEST") // regexp is not injected; matching endpoints are recognized, but unlocking fails
+                        .anyRequest().authenticated()
+                );
+               // .formLogin(Customizer.withDefaults());
+
+        return http.build();
+    }
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username("user")
+                .password("user")
+                .roles("USER").build();
+        UserDetails admin = User.withDefaultPasswordEncoder()
+                .username("admin")
+                .password("admin")
+                .roles("ADMIN").build();
+        UserDetails master = User.withDefaultPasswordEncoder()
+                .username("master")
+                .password("master")
+                .roles("MASTER").build();
+        UserDetails superuser = User.withDefaultPasswordEncoder()
+                .username("super")
+                .password("super")
+                .roles("ADMIN", "USER").build();
+        UserDetails guest = User.withDefaultPasswordEncoder()
+                .username("guest")
+                .password("guest")
+                .roles("GUEST")
+                .build();
+        return new InMemoryUserDetailsManager(user, admin, guest, master, superuser);
+    }
+}

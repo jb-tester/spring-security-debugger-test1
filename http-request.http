@@ -1,0 +1,86 @@
+###isAuthenticated
+GET http://localhost:8080/
+Authorization: Basic {{username}} {{password}}
+
+###permitAll
+GET http://localhost:8080/home
+###permitAll
+GET http://localhost:8080/new_home
+
+###admin
+GET http://localhost:8080/admin
+Authorization: Basic {{username}} {{password}}
+###admin
+GET http://localhost:8080/admin/test1
+Authorization: Basic {{username}} {{password}}
+
+###admin
+GET http://localhost:8080/registered/protected/test1
+Authorization: Basic {{username}} {{password}}
+###user
+GET http://localhost:8080/registered/secured/test2
+Authorization: Basic {{username}} {{password}}
+###admin/user/guest
+GET http://localhost:8080/registered/multi/test3
+Authorization: Basic {{username}} {{password}}
+###isAuthenticated
+GET http://localhost:8080/registered
+Authorization: Basic {{username}} {{password}}
+
+###anon
+GET http://localhost:8080/anonymous/test1
+###anon
+GET http://localhost:8080/anonymous/foo/test2
+Authorization: Basic {{username}} {{password}}
+
+###user/admin
+POST http://localhost:8080/home
+Authorization: Basic {{username}} {{password}}
+Content-Type: application/json
+
+"home!"
+###user/admin
+POST http://localhost:8080/foo
+Authorization: Basic {{username}} {{password}}
+Content-Type: application/json
+
+"foo!"
+###user/admin
+POST http://localhost:8080/
+Authorization: Basic {{username}} {{password}}
+Content-Type: application/json
+
+"root!"
+
+
+###"/{*var}/master1", hasRole("MASTER")
+GET http://localhost:8080/foo/master1
+Authorization: Basic {{username}} {{password}}
+
+###"/{*var}/master1", hasRole("MASTER")
+GET http://localhost:8080/foo/test/master1
+Authorization: Basic {{username}} {{password}}
+
+###"/**/master2", hasRole("MASTER")
+GET http://localhost:8080/bar/test/master2
+Authorization: Basic {{username}} {{password}}
+
+###"hasRole('ADMIN') || hasRole('USER')"
+GET http://localhost:8080/expression/protected/test1
+Authorization: Basic {{username}} {{password}}
+
+###"hasRole('ADMIN') && hasRole('USER')" (super)
+GET http://localhost:8080/expression/secured/test2
+Authorization: Basic {{username}} {{password}}
+
+###"/regex\\d*(/.*)?", role=guest
+GET http://localhost:8080/regex111/test1
+Authorization: Basic {{username}} {{password}}
+
+###"/regex\\d*(/.*)?", role=guest
+GET http://localhost:8080/regex25/test2
+Authorization: Basic {{username}} {{password}}
+
+###"/regex\\d*(/.*)?", role=guest
+GET http://localhost:8080/regex3/test3
+Authorization: Basic {{username}} {{password}}

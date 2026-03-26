@@ -1,0 +1,70 @@
+###permitAll; no need to unlock, but unlock is suggested
+GET http://localhost:8080/new_home
+###permitAll; no need to unlock, but unlock is suggested
+GET http://localhost:8080/home
+
+###hasAuthority("ROLE_ADMIN"), unlock works
+GET http://localhost:8080/admin
+###hasAuthority("ROLE_ADMIN"), unlock works
+GET http://localhost:8080/admin/test1
+
+###hasRole(admin); unlock works
+GET http://localhost:8080/registered/protected/test1
+###hasRole(user); unlock works
+GET http://localhost:8080/registered/secured/test2
+###hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_GUEST"); unlock works
+GET http://localhost:8080/registered/multi/test3
+
+###isAuthenticated; unlock works
+GET http://localhost:8080/registered
+
+###isFullyAuthenticated; unlock doesn't work from controller, works here
+GET http://localhost:8080/
+
+###anonymous; no need to unlock, unlock is not suggested
+GET http://localhost:8080/anonymous/test1
+###anonymous; no need to unlock, unlock is not suggested
+GET http://localhost:8080/anonymous/foo/test2
+
+###hasAnyRole( "ADMIN", "USER"); unlock works
+POST http://localhost:8080/home
+Content-Type: application/json
+
+"home!"
+###hasAnyRole( "ADMIN", "USER"); unlock works
+POST http://localhost:8080/foo
+Content-Type: application/json
+
+"foo!"
+###hasAnyRole( "ADMIN", "USER");  unlock doesn't work - root mapping
+POST http://localhost:8080/
+Content-Type: application/json
+
+"root!"
+
+###"/{*var}/master1", hasRole("MASTER"); unlocking fails
+GET http://localhost:8080/foo/master1
+
+###"/{*var}/master1", hasRole("MASTER"); unlocking fails
+GET http://localhost:8080/foo/test/master1
+
+###"/**/master2", hasRole("MASTER"); unlocking works
+GET http://localhost:8080/bar/test/master2
+
+###"hasRole('GUEST')"; unlocking fails
+GET http://localhost:8080/expression/guest/test0
+
+###"hasRole('ADMIN') || hasRole('USER')"; unlocking fails
+GET http://localhost:8080/expression/protected/test1
+
+###"hasRole('ADMIN') && hasRole('USER')"; unlocking fails
+GET http://localhost:8080/expression/secured/test2
+
+###"/regex\\d*(/.*)?", role=guest;; unlocking fails
+GET http://localhost:8080/regex111/test1
+
+###"/regex\\d*(/.*)?", role=guest; unlocking fails
+GET http://localhost:8080/regex25/test2
+
+###"/regex\\d*(/.*)?", role=guest; unlocking fails
+GET http://localhost:8080/regex3/test3
