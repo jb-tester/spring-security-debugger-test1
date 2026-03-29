@@ -72,3 +72,9 @@ GET http://localhost:8080/regex25/test2
 
 ###"/regex\\d*(/.*)?", role=guest; unlocking fails
 GET http://localhost:8080/regex3/test3
+
+###concatenation test: ok
+GET http://localhost:8080/concat/test1/test
+
+###concatenation test2: ok
+GET http://localhost:8080/concat/test2/test

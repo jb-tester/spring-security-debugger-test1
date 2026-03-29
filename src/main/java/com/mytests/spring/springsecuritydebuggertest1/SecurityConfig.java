@@ -19,8 +19,12 @@ import static org.springframework.security.web.util.matcher.RegexRequestMatcher.
 @EnableWebSecurity
 public class SecurityConfig {
 
+    public static final String TEST2 = "/test2";
+    public static final String CONCAT = "/concat";
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        String url = "/test1";
         http
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
@@ -37,6 +41,8 @@ public class SecurityConfig {
                         .requestMatchers("/registered/multiAndRoles/**").hasAllRoles("ADMIN", "USER") // no unlocking
                         .requestMatchers("/{*var}/master1").hasRole("MASTER") // partially detected roots, no unlocking even for detected - unlocking is fixed
                         .requestMatchers("/**/master2").hasRole("MASTER") // ok
+                        .requestMatchers("/concat" + url + "/**").hasRole("GUEST")
+                        .requestMatchers(CONCAT + TEST2 + "/**").hasRole("GUEST")
                         .requestMatchers("/expression/guest/**").access(new WebExpressionAuthorizationManager("hasRole('GUEST')")) // detected as permitAll, unlocking fails
                         .requestMatchers("/expression/protected/**").access(new WebExpressionAuthorizationManager("hasRole('ADMIN') || hasRole('USER')")) // detected as permitAll, unlocking fails
                         .requestMatchers("/expression/secured/**").access(new WebExpressionAuthorizationManager("hasRole('ADMIN') && hasRole('USER')")) // detected as permitAll, unlocking fails
