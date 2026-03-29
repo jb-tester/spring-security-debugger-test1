@@ -31,11 +31,17 @@ public class RegisteredController {
         String details = Objects.requireNonNull(context.getAuthentication()).toString();
         return ResponseEntity.ok("registered test3 that requires USER/ADMIN/GUEST role: " + details);
     }
-    // hasAllAuthorities("ROLE_ADMIN", "ROLE_USER", "ROLE_GUEST")
+    // hasAllAuthorities("ROLE_ADMIN", "ROLE_USER")
     @GetMapping("/multiAnd/test4")
     public ResponseEntity<String> registeredTest4(@CurrentSecurityContext SecurityContext context) {
         String details = Objects.requireNonNull(context.getAuthentication()).toString();
-        return ResponseEntity.ok("registered test4 that requires USER & ADMIN roles: " + details);
+        return ResponseEntity.ok("registered test4 that requires USER & ADMIN authorities: " + details);
+    }
+    // hasAllRoles("ADMIN", "USER")
+    @GetMapping("/multiAndRoles/test5")
+    public ResponseEntity<String> registeredTest5(@CurrentSecurityContext SecurityContext context) {
+        String details = Objects.requireNonNull(context.getAuthentication()).toString();
+        return ResponseEntity.ok("registered test5 that requires USER & ADMIN roles: " + details);
     }
     // isAuthenticated; unlock works
     @GetMapping()

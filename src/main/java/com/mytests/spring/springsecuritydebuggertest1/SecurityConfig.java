@@ -34,6 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/registered/secured/**").hasRole("USER") // ok
                         .requestMatchers("/registered/multiOr/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_GUEST") // ok
                         .requestMatchers("/registered/multiAnd/**").hasAllAuthorities("ROLE_ADMIN", "ROLE_USER") // no unlocking
+                        .requestMatchers("/registered/multiAndRoles/**").hasAllRoles("ADMIN", "USER") // no unlocking
                         .requestMatchers("/{*var}/master1").hasRole("MASTER") // partially detected roots, no unlocking even for detected - unlocking is fixed
                         .requestMatchers("/**/master2").hasRole("MASTER") // ok
                         .requestMatchers("/expression/guest/**").access(new WebExpressionAuthorizationManager("hasRole('GUEST')")) // detected as permitAll, unlocking fails

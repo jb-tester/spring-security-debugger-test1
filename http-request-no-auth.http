@@ -17,7 +17,8 @@ GET http://localhost:8080/registered/multiOr/test3
 
 ###hasAllAuthorities("ROLE_ADMIN", "ROLE_USER"); unlock doesn't work
 GET http://localhost:8080/registered/multiAnd/test4
-
+###hasAllRoles("ADMIN", "USER"); unlock doesn't work
+GET http://localhost:8080/registered/multiAndRoles/test5
 ###isAuthenticated; unlock works
 GET http://localhost:8080/registered
 
