@@ -26,12 +26,17 @@ public class RegisteredController {
         return ResponseEntity.ok("registered test2 that requires USER role: " + details);
     }
     // hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_GUEST")
-    @GetMapping("/multi/test3")
+    @GetMapping("/multiOr/test3")
     public ResponseEntity<String> registeredTest3(@CurrentSecurityContext SecurityContext context) {
         String details = Objects.requireNonNull(context.getAuthentication()).toString();
         return ResponseEntity.ok("registered test3 that requires USER/ADMIN/GUEST role: " + details);
     }
-
+    // hasAllAuthorities("ROLE_ADMIN", "ROLE_USER", "ROLE_GUEST")
+    @GetMapping("/multiAnd/test4")
+    public ResponseEntity<String> registeredTest4(@CurrentSecurityContext SecurityContext context) {
+        String details = Objects.requireNonNull(context.getAuthentication()).toString();
+        return ResponseEntity.ok("registered test4 that requires USER & ADMIN roles: " + details);
+    }
     // isAuthenticated; unlock works
     @GetMapping()
     public ResponseEntity<String> registeredRoot(@CurrentSecurityContext SecurityContext context) {

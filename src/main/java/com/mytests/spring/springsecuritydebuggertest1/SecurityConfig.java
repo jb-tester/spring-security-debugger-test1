@@ -25,20 +25,21 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST).hasAnyRole( "ADMIN", "USER")  // ok, except the root mapping
-                        .requestMatchers(HttpMethod.GET,"/").fullyAuthenticated()  // ok, except the root mapping
-                        .requestMatchers("/new_home", "/home").permitAll() // unlock is not required but suggested
+                        .requestMatchers(HttpMethod.POST).hasAnyRole( "ADMIN", "USER")  // ok, except the root mapping - fixed
+                        .requestMatchers(HttpMethod.GET,"/").fullyAuthenticated()  // ok, except the root mapping - fixed
+                        .requestMatchers("/new_home", "/home").permitAll() // unlock is not required but suggested - fixed
                         .requestMatchers("/anonymous/**").anonymous() // ok
                         .requestMatchers(HttpMethod.GET,"/admin/**").hasAuthority("ROLE_ADMIN") // ok
                         .requestMatchers("/registered/protected/**").hasRole("ADMIN") // ok
                         .requestMatchers("/registered/secured/**").hasRole("USER") // ok
-                        .requestMatchers("/registered/multi/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_GUEST") // ok
-                        .requestMatchers("/{*var}/master1").hasRole("MASTER") // partially detected roots, no unlocking even for detected
+                        .requestMatchers("/registered/multiOr/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_GUEST") // ok
+                        .requestMatchers("/registered/multiAnd/**").hasAllAuthorities("ROLE_ADMIN", "ROLE_USER") // no unlocking
+                        .requestMatchers("/{*var}/master1").hasRole("MASTER") // partially detected roots, no unlocking even for detected - unlocking is fixed
                         .requestMatchers("/**/master2").hasRole("MASTER") // ok
                         .requestMatchers("/expression/guest/**").access(new WebExpressionAuthorizationManager("hasRole('GUEST')")) // detected as permitAll, unlocking fails
                         .requestMatchers("/expression/protected/**").access(new WebExpressionAuthorizationManager("hasRole('ADMIN') || hasRole('USER')")) // detected as permitAll, unlocking fails
                         .requestMatchers("/expression/secured/**").access(new WebExpressionAuthorizationManager("hasRole('ADMIN') && hasRole('USER')")) // detected as permitAll, unlocking fails
-                        .requestMatchers(regexMatcher("/regex\\d*(/.*)?")).hasRole("GUEST") // regexp is not injected; matching endpoints are recognized, but unlocking fails
+                        .requestMatchers(regexMatcher("/regex\\d*(/.*)?")).hasRole("GUEST") // regexp is not injected; matching endpoints are recognized, but unlocking fails - unlocking is fixed
                         .anyRequest().authenticated()
                 );
                // .formLogin(Customizer.withDefaults());

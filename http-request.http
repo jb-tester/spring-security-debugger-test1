@@ -21,7 +21,10 @@ Authorization: Basic {{username}} {{password}}
 GET http://localhost:8080/registered/secured/test2
 Authorization: Basic {{username}} {{password}}
 ###admin/user/guest
-GET http://localhost:8080/registered/multi/test3
+GET http://localhost:8080/registered/multiOr/test3
+Authorization: Basic {{username}} {{password}}
+###hasAllAuthorities("ROLE_ADMIN", "ROLE_USER") - superuser
+GET http://localhost:8080/registered/multiAnd/test4
 Authorization: Basic {{username}} {{password}}
 ###isAuthenticated
 GET http://localhost:8080/registered

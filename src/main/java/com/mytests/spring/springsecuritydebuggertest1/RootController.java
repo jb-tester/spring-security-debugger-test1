@@ -18,7 +18,7 @@ import java.util.Objects;
 @RequestMapping("/")
 public class RootController {
 
-    // isAuthenticated; unlock from controller doesn't work
+    // isFullyAuthenticated; unlock from controller doesn't work
     @GetMapping()
     public ResponseEntity<String> registeredRoot(@CurrentSecurityContext SecurityContext context) {
         String details = Objects.requireNonNull(context.getAuthentication()).toString();

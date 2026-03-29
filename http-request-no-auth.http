@@ -13,7 +13,10 @@ GET http://localhost:8080/registered/protected/test1
 ###hasRole(user); unlock works
 GET http://localhost:8080/registered/secured/test2
 ###hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_GUEST"); unlock works
-GET http://localhost:8080/registered/multi/test3
+GET http://localhost:8080/registered/multiOr/test3
+
+###hasAllAuthorities("ROLE_ADMIN", "ROLE_USER"); unlock doesn't work
+GET http://localhost:8080/registered/multiAnd/test4
 
 ###isAuthenticated; unlock works
 GET http://localhost:8080/registered
