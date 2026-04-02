@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/registered/multiOr/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_GUEST") // ok
                         .requestMatchers("/registered/multiAnd/**").hasAllAuthorities("ROLE_ADMIN", "ROLE_USER") // no unlocking
                         .requestMatchers("/registered/multiAndRoles/**").hasAllRoles("ADMIN", "USER") // no unlocking
+                        .requestMatchers("/registered/customAuthorities/**").hasAnyAuthority("FOO", "BAR")
                         .requestMatchers("/{*var}/master1").hasRole("MASTER") // partially detected roots, no unlocking even for detected - unlocking is fixed
                         .requestMatchers("/**/master2").hasRole("MASTER") // ok
                         .requestMatchers("/concat" + url + "/**").hasRole("GUEST")
@@ -76,6 +77,11 @@ public class SecurityConfig {
                 .password("guest")
                 .roles("GUEST")
                 .build();
-        return new InMemoryUserDetailsManager(user, admin, guest, master, superuser);
+        UserDetails custom = User.withDefaultPasswordEncoder()
+                .username("custom")
+                .password("custom")
+                .authorities("FOO", "BAR")
+                .build();
+        return new InMemoryUserDetailsManager(user, admin, guest, master, superuser, custom);
     }
 }

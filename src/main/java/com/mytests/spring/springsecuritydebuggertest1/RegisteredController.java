@@ -43,6 +43,12 @@ public class RegisteredController {
         String details = Objects.requireNonNull(context.getAuthentication()).toString();
         return ResponseEntity.ok("registered test5 that requires USER & ADMIN roles: " + details);
     }
+    // hasAnyAutority("FOO", "BAR")
+    @GetMapping("/customAuthorities/test6")
+    public ResponseEntity<String> registeredTest6(@CurrentSecurityContext SecurityContext context) {
+        String details = Objects.requireNonNull(context.getAuthentication()).toString();
+        return ResponseEntity.ok("registered test5 that requires FOO || BAR authorities: " + details);
+    }
     // isAuthenticated; unlock works
     @GetMapping()
     public ResponseEntity<String> registeredRoot(@CurrentSecurityContext SecurityContext context) {

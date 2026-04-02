@@ -1,6 +1,6 @@
-###permitAll; no need to unlock, but unlock is suggested
+###permitAll; no need to unlock, but unlock is suggested - fixed
 GET http://localhost:8080/new_home
-###permitAll; no need to unlock, but unlock is suggested
+###permitAll; no need to unlock, but unlock is suggested - fixed
 GET http://localhost:8080/home
 
 ###hasAuthority("ROLE_ADMIN"), unlock works
@@ -21,8 +21,10 @@ GET http://localhost:8080/registered/multiAnd/test4
 GET http://localhost:8080/registered/multiAndRoles/test5
 ###isAuthenticated; unlock works
 GET http://localhost:8080/registered
+###.hasAnyAuthority("FOO", "BAR")
+GET http://localhost:8080/registered/customAuthorities/test6
 
-###isFullyAuthenticated; unlock doesn't work from controller, works here
+###isFullyAuthenticated; unlock doesn't work from controller, works here - fixed
 GET http://localhost:8080/
 
 ###anonymous; no need to unlock, unlock is not suggested
@@ -40,13 +42,13 @@ POST http://localhost:8080/foo
 Content-Type: application/json
 
 "foo!"
-###hasAnyRole( "ADMIN", "USER");  unlock doesn't work - root mapping
+###hasAnyRole( "ADMIN", "USER");  unlock doesn't work - root mapping - fixed
 POST http://localhost:8080/
 Content-Type: application/json
 
 "root!"
 
-###"/{*var}/master1", hasRole("MASTER"); unlocking fails
+###"/{*var}/master1", hasRole("MASTER"); unlocking fails - fixed
 GET http://localhost:8080/foo/master1
 
 ###"/{*var}/master1", hasRole("MASTER"); unlocking fails
@@ -64,13 +66,13 @@ GET http://localhost:8080/expression/protected/test1
 ###"hasRole('ADMIN') && hasRole('USER')"; unlocking fails
 GET http://localhost:8080/expression/secured/test2
 
-###"/regex\\d*(/.*)?", role=guest;; unlocking fails
+###"/regex\\d*(/.*)?", role=guest;; unlocking fails - fixed
 GET http://localhost:8080/regex111/test1
 
-###"/regex\\d*(/.*)?", role=guest; unlocking fails
+###"/regex\\d*(/.*)?", role=guest; unlocking fails - fixed
 GET http://localhost:8080/regex25/test2
 
-###"/regex\\d*(/.*)?", role=guest; unlocking fails
+###"/regex\\d*(/.*)?", role=guest; unlocking fails - fixed
 GET http://localhost:8080/regex3/test3
 
 ###concatenation test: ok
