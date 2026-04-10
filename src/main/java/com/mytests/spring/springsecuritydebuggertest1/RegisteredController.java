@@ -19,11 +19,13 @@ public class RegisteredController {
         String details = Objects.requireNonNull(context.getAuthentication()).toString();
         return ResponseEntity.ok("registered test1 that requires ADMIN role: " + details);
     }
-    // hasRole(user); unlock works
-    @GetMapping("/secured/test2")
+    // hasRole(user); unlock works for the first mapping, second and third ones are not unlocked
+    @GetMapping({"/secured/test2",
+            "/secured/test3",
+            "/secured/test4"})
     public ResponseEntity<String> registeredTest2(@CurrentSecurityContext SecurityContext context) {
         String details = Objects.requireNonNull(context.getAuthentication()).toString();
-        return ResponseEntity.ok("registered test2 that requires USER role: " + details);
+        return ResponseEntity.ok("registered test2|test3|test4 that requires USER role: " + details);
     }
     // hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_GUEST")
     @GetMapping("/multiOr/test3")

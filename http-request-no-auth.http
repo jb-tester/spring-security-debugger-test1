@@ -10,8 +10,12 @@ GET http://localhost:8080/admin/test1
 
 ###hasRole(admin); unlock works
 GET http://localhost:8080/registered/protected/test1
-###hasRole(user); unlock works
+###hasRole(user); unlock works both from controller and client
 GET http://localhost:8080/registered/secured/test2
+###hasRole(user); unlock works only from http client
+GET http://localhost:8080/registered/secured/test3
+###hasRole(user); unlock works only from http client
+GET http://localhost:8080/registered/secured/test4
 ###hasAnyAuthority("ROLE_ADMIN", "ROLE_USER", "ROLE_GUEST"); unlock works
 GET http://localhost:8080/registered/multiOr/test3
 
