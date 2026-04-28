@@ -1,3 +1,4 @@
+
 ###isAuthenticated
 GET http://localhost:8080/
 Authorization: Basic {{username}} {{password}}
@@ -92,4 +93,34 @@ Authorization: Basic {{username}} {{password}}
 
 ###"/regex\\d*(/.*)?", role=guest
 GET http://localhost:8080/regex3/test3
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://localhost:8080/misc/pathvars/fooPathVar
+Authorization: Basic {{username}} {{password}}
+###
+GET http://localhost:8080/misc/pathvars/barPathVar
+Authorization: Basic {{username}} {{password}}
+###
+GET http://localhost:8080/misc/reqparams/test?
+    param1=reqParam1Value1&
+    param2=reqParam2Value1
+Authorization: Basic {{username}} {{password}}
+###
+GET http://localhost:8080/misc/reqparams/test?
+    param1=reqParam1Value2&
+    param2=reqParam2Value2
+Authorization: Basic {{username}} {{password}}
+###
+GET http://localhost:8080/misc/params/testPrincipal
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://localhost:8080/misc/params/testAuthentication
+Authorization: Basic {{username}} {{password}}
+###
+GET http://localhost:8080/misc/params/testAuthPrincipalAnno
+Authorization: Basic {{username}} {{password}}
+###
+GET http://localhost:8080/misc/params/currentSecContextExprTest
 Authorization: Basic {{username}} {{password}}

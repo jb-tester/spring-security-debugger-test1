@@ -84,3 +84,31 @@ GET http://localhost:8080/concat/test1/test
 
 ###concatenation test2: ok
 GET http://localhost:8080/concat/test2/test
+
+###
+GET http://localhost:8080/misc/pathvars/fooPathVar
+
+###
+GET http://localhost:8080/misc/pathvars/barPathVar
+
+###
+GET http://localhost:8080/misc/reqparams/test?
+    param1=reqParam1Value1&
+    param2=reqParam2Value1
+
+###
+GET http://localhost:8080/misc/reqparams/test?
+    param1=reqParam1Value2&
+    param2=reqParam2Value2
+
+###
+GET http://localhost:8080/misc/params/testPrincipal
+
+###
+GET http://localhost:8080/misc/params/testAuthentication
+
+###
+GET http://localhost:8080/misc/params/testAuthPrincipalAnno
+
+###
+GET http://localhost:8080/misc/params/currentSecContextExprTest

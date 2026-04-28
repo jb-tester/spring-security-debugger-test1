@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -48,6 +49,9 @@ public class SecurityConfig {
                         .requestMatchers("/expression/protected/**").access(new WebExpressionAuthorizationManager("hasRole('ADMIN') || hasRole('USER')")) // detected as permitAll, unlocking fails
                         .requestMatchers("/expression/secured/**").access(new WebExpressionAuthorizationManager("hasRole('ADMIN') && hasRole('USER')")) // detected as permitAll, unlocking fails
                         .requestMatchers(regexMatcher("/regex\\d*(/.*)?")).hasRole("GUEST") // regexp is not injected; matching endpoints are recognized, but unlocking fails - unlocking is fixed
+                        .requestMatchers("/misc/pathvars/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/misc/reqparams/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/misc/params/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                 );
                // .formLogin(Customizer.withDefaults());
